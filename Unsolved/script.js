@@ -12,12 +12,22 @@ var totalSeconds = 0;
 var secondsElapsed = 0;
 var interval;
 
+// To switch between working mode and resting mode
+var workingMode = true;
+
+
 
 function initiateTimer() {
 
-  totalSeconds = 60*(parseInt(workMinutesInput.value) + parseInt(restMinutesInput.value));
-  interval =0;
-  console.log(totalSeconds);
+  // In work mode we take work time
+  if (workingMode === true){
+    totalSeconds = 60*(parseInt(workMinutesInput.value));
+  } else {
+    // In rest mode we take rest time
+    totalSeconds = 60*(parseInt(restMinutesInput.value));
+  }
+ 
+  interval = 0;
 
 }
 
@@ -38,19 +48,31 @@ function displayTime() {
 //function to start/restart timer and toggle he status
 
 function startTimer() {
-  statusToggle = true;
-  console.log(statusToggle);
-
+ 
   interval = setInterval(function() {
     totalSeconds--;
     console.log(totalSeconds);
-    //display
-    displayTime();
     
-    if(totalSeconds === 0) {
+    // need to check <= 0, === 0 is not enough
+    if(totalSeconds <= 0) {
+      // stop the timer
       clearInterval(interval);
-      alert("time finished");
+      // show the alert
+      if ( workingMode === true) {
+        alert("Time for a break!");
+        
+      } else {
+        alert("Time to get back to work!");
+        
+      }
+    } else {
+    //display only when total seconds > 0
+    displayTime();
+      
     }
+
+    
+
   }, 1000);
 }
 
@@ -58,25 +80,62 @@ function startTimer() {
 
 function pauseTimer(){
   clearInterval(interval);
-  statusToggle = false;
-  console.log(statusToggle);
 }
 
 //function to clear timer interval reset the timer and toggle status
 
 function stopTimer(){
   clearInterval(interval);
-  totalSeconds = 59;
+  totalSeconds = 0;
+
+  // Reads the values and sets totalSeconds
+  initiateTimer();
   displayTime();
-  counterStatus = false;
-  console.log(counterStatus);
 }
  
+function switchMode() {
+
+ // Check if toggle is checked
+ if (statusToggle.checked) {
+
+  workingMode = true;
+  statusSpan.innerHTML = "Working";
+
+  //stop the timer, clear total seconds
+  clearInterval(interval); 
+  totalSeconds = 0;
+
+  // Reads the values and sets totalSeconds again
+  initiateTimer();
+  displayTime();
+
+} else {
+  // we are in rest mode
+  workingMode = false;
+  statusSpan.innerHTML = "Rest";
+
+   //stop the timer
+   clearInterval(interval); 
+   totalSeconds = 0;
+
+   // Reads the values and sets totalSeconds
+   initiateTimer();
+   displayTime();
+ 
+}
+
+console.log(statusToggle.checked);
+
+
+}
 
 // =====================
 
+// Reads the values and sets totalSeconds
 initiateTimer();
+displayTime();
 
 playButton.addEventListener("click",startTimer);
 pauseButton.addEventListener("click",pauseTimer);
 stopButton.addEventListener("click",stopTimer);
+statusToggle.addEventListener("click",switchMode);
