@@ -35,28 +35,48 @@ function displayTime() {
 
 }
 
+//function to start/restart timer and toggle he status
 
-function setTime() {
-  var timerInterval = setInterval(function() {
+function startTimer() {
+  statusToggle = true;
+  console.log(statusToggle);
+
+  interval = setInterval(function() {
     totalSeconds--;
     console.log(totalSeconds);
     //display
     displayTime();
     
     if(totalSeconds === 0) {
-      clearInterval(timerInterval);
+      clearInterval(interval);
       alert("time finished");
     }
   }, 1000);
 }
 
-function startTimer() {
-  // Write code to start the timer here
+//function to clear timer interval and toggle status
+
+function pauseTimer(){
+  clearInterval(interval);
+  statusToggle = false;
+  console.log(statusToggle);
+}
+
+//function to clear timer interval reset the timer and toggle status
+
+function stopTimer(){
+  clearInterval(interval);
+  totalSeconds = 59;
+  displayTime();
+  counterStatus = false;
+  console.log(counterStatus);
 }
  
 
 // =====================
 
 initiateTimer();
-setTime();
-playButton.addEventListener("click", startTimer);
+
+playButton.addEventListener("click",startTimer);
+pauseButton.addEventListener("click",pauseTimer);
+stopButton.addEventListener("click",stopTimer);
