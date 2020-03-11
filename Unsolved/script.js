@@ -12,6 +12,8 @@ var totalSeconds = 0;
 var secondsElapsed = 0;
 var interval;
 
+
+
 // To switch between working mode and resting mode
 var workingMode = true;
 
@@ -20,6 +22,11 @@ var workingMode = true;
 function initiateTimer() {
 
   // In work mode we take work time
+  workMinutesInput.value  = localStorage.getItem("work");
+  restMinutesInput.value = localStorage.getItem("rest");
+
+
+
   if (workingMode === true){
     totalSeconds = 60*(parseInt(workMinutesInput.value));
   } else {
@@ -48,7 +55,13 @@ function displayTime() {
 //function to start/restart timer and toggle he status
 
 function startTimer() {
- 
+//  workMinutesInput.textContent  = localStorage.getItem("work");
+//  restMinutesInput.textContent = localStorage.getItem("rest");
+
+
+  localStorage.setItem("work",workMinutesInput.value);
+  localStorage.setItem("rest",restMinutesInput.value);
+
   interval = setInterval(function() {
     totalSeconds--;
     console.log(totalSeconds);
